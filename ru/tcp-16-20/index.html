@@ -142,20 +142,22 @@
       { id: "OR-01", provider: "Oracle", times: 1, url: "https://sfx.ovh/10M.bin" },
     ];
 
-    (function appendCustomTestFromQuery() {
+    const OK_THRESHOLD_BYTES = 64 * 1024;
+    let TIMEOUT_MS = 5000;
+
+    (function getParamsHandler() {
       const params = new URLSearchParams(window.location.search);
+
       const url = params.get("url");
       if (url) {
         const provider = params.get("provider") || "Custom";
         const times = parseInt(params.get("times")) || 1;
         const newTest = { id: `CUST-01`, provider, times, url };
         TEST_SUITE.push(newTest);
-        console.log("Custom test added:", newTest);
       }
-    })();
 
-    const TIMEOUT_MS = 5000;
-    const OK_THRESHOLD_BYTES = 64 * 1024;
+      TIMEOUT_MS = parseInt(params.get("timeout")) || TIMEOUT_MS
+    })();
 
     const fetchOpt = ctrl => ({
       method: "GET",
