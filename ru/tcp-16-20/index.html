@@ -15,9 +15,9 @@
     color: #333;
   }
 
-  h2 {
-    font-size: 1.8em;
-    margin: 0 0 1em;
+  .header {
+    font-size: 1.2em;
+    margin: 0 0.5em 0;
     color: #1a1a1a;
   }
 
@@ -29,7 +29,7 @@
   #start {
     font-size: 1.2em;
     padding: .8em 1.5em;
-    background: #007bff;
+    background: #ff008b;
     color: #fff;
     border: 0;
     border-radius: 6px;
@@ -38,7 +38,7 @@
   }
 
   #start:hover {
-    background: #0056b3;
+    background: #d40074;
     transform: translateY(-2px);
   }
 
@@ -56,13 +56,14 @@
     width: 100%;
     border-collapse: collapse;
     background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
     border-radius: 8px;
     overflow: hidden;
+    margin-top: 0.5em;
   }
 
   th, td {
-    padding: 12px 15px;
+    padding: 4px 15px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
   }
@@ -86,7 +87,8 @@
     font: .9em 'Courier New', Courier, monospace;
     max-height: 300px;
     overflow-y: auto;
-    margin: 20px 0;
+    margin: 0.5em 0;
+    text-wrap: wrap;
   }
 
   .footer {
@@ -103,19 +105,23 @@
   .footer a:hover { text-decoration: underline; }
 
   @media (max-width: 600px) {
-    body { padding: 15px; }
-    h2 { font-size: 1.5em; }
-    #start { width: 100%; font-size: 1em; }
+    body { padding: 10px; }
+    .header { font-size: 1em; }
+    #start { width: 50%; font-size: 1em; }
     table { font-size: .9em; }
-    th, td { padding: 8px; }
+    th, td { padding: 3px 8px; }
+    #log { padding: 7px; }
   }
   </style>
 </head>
 
 <body>
-  <h2>Status: <span id="status" class="status-ready">Ready ⚡</span></h2>
-  <button id="start">Start</button>
-  <hr>
+  <div>
+    <button id="start">Start</button>
+    <span class="header">
+      Status: <span id="status" class="status-ready">Ready ⚡</span>
+    </span>
+  </div>
   <table id="results">
     <tr>
       <th>#</th>
@@ -189,7 +195,7 @@
     const logPush = (level, prefix, msg) => {
       const now = new Date();
       const ts = now.toLocaleTimeString([], { hour12: false }) + "." + now.getMilliseconds().toString().padStart(3, "0");
-      log.textContent += `[${ts}] ${prefix}/${level}: ${msg}\n`;
+      log.textContent += `[${ts}] ${prefix ? prefix + "/" : ""}${level}: ${msg}\n`;
       log.scrollTop = log.scrollHeight;
     };
 
@@ -233,6 +239,7 @@
         status.textContent = "No internet access ⚠️";
         status.className = "status-error";
       }
+      logPush("INFO", null, "Done.");
       toggleUI(false);
     };
 
