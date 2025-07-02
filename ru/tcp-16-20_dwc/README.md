@@ -1,6 +1,7 @@
 # RU :: TCP 16-20 DWC (domain whitelist checker)
-Allows to find out whitelisted items on DPIs where _TCP 16-20_ blocking method is applied. This kind of information can be interesting in its own right as well as useful for bypassing limitations.<br>
-A list of domains is required as input. Also requires _Python 3_, the _curl_ utility, and a specially configured server on "limited" networks. See belowe for details.
+Allows to find out whitelisted items on DPIs where _TCP 16-20_ blocking method is applied.
+This kind of information can be interesting in its own right as well as useful for bypassing limitations.<br>
+⚠️ The whitelist means, among other things, that websites (more specifically, domains and subdomains) on this list are loaded without _TCP 16-20_ blocking method limitations (a censor is based on SNI in the TLS handshake and possibly an HTTP `Host` header if _plain HTTP_ is used).
 
 ## Ready-to-use results
 Not everyone will want to run this script on their own (especially because it can run for quite a long time, and because its implementation is naive and uses a bruteforce method). That's why this work has already been done by the committers of this repository.
