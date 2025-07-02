@@ -1,5 +1,5 @@
 # DPI Checkers
-🚀 This repository contains checkers that allow you to determine if your “home” ISP has DPI, as well as the specific methods the censor uses for limitations.
+🚀 This repository contains checkers that allow you to determine if your “home” ISP has DPI, as well as the specific methods (and their parameters) the censor uses for limitations.
 
 ## Checkers list
 - **RU :: TCP 16-20** => [https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20](https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20)<br>
@@ -13,6 +13,9 @@
   | provider | string | _Custom_ | Provider name (you can set any name). |
 
   See [here](https://github.com/net4people/bbs/issues/490) for details on this blocking method.
+- **RU :: TCP 16-20 DWC** (domain whitelist checker)<br>
+  Allows to find out whitelisted items on DPIs where _TCP 16-20_ blocking method is applied. This kind of information can be interesting in its own right as well as useful for bypassing limitations.<br>
+  A list of domains is required as input. Also requires _Python 3_, the _curl_ utility, and a specially configured server on "limited" networks. See [here](ru/tcp-16-20_dwc) for details (ready-to-use results are also available for download there).
 
 ## Contributing
 We would be happy if you could help us improve our checkers through PR or by creating issues.
