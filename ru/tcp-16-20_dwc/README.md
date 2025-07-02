@@ -15,7 +15,7 @@ The top-10k popular domains based on the list from [OpenDNS](https://github.com/
 As far as we know, the whitelist is created using the `*.domain.com:*` scheme. Thus, you can (and should?) use subdomains of the found domains (if _site.com_ works, then _foo.site.com_ and _foo.bar.site.com_ will also work).
 
 We also bring to your attention a graph that shows the dependence of being on the whitelist on the place in the top (provided by OpenDNS).
-![graph](https://github.com/user-attachments/assets/7fcdd150-99ce-4686-9c11-d0fab2610697)
+![graph](https://raw.githubusercontent.com/hyperion-cs/dpi-checkers/refs/heads/main/static/images/tcp-16-20_dwc_based_on_opendns_2025-07-02.png)
 It can be seen that there is a correlation between these properties (which is generally logical).
 
 ## Self-running the script
@@ -57,3 +57,8 @@ It can be seen that there is a correlation between these properties (which is ge
 
 The script is single-threaded, but you can parallelize it via e.g. GNU [parallel](https://www.gnu.org/software/parallel/) utility.
 Also you can run the result file through [this](/utils/domain2provider.py) script to find out the likely ISPs the domain owners are using, as well as the country.
+
+## Contributing
+We would be happy if you could help us improve our checkers through PR or by creating issues.
+Also you can star the repository so you don't lose the checkers.
+The repository is available [here](https://github.com/hyperion-cs/dpi-checkers).
