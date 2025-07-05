@@ -137,7 +137,6 @@
   </div>
 
   <script>
-    const URL_CHECK_NETWORK = "https://one.one.one.one/favicon.ico";
     const TEST_SUITE = [
       { id: "CF-02", provider: "Cloudflare", times: 1, url: "https://genshin.jmp.blue/characters/all#" },
       { id: "CF-03", provider: "Cloudflare", times: 1, url: "https://api.frankfurter.dev/v1/2000-01-01..2002-12-31" },
@@ -210,24 +209,14 @@
       return url.includes('?') ? `${url}&t=${Math.random()}` : `${url}?t=${Math.random()}`;
     };
 
-    const checkNetwork = async () => {
+    const startOrchestrator = async () => {
       status.textContent = "Checking ⏰";
       status.className = "status-checking";
       for (let i = results.rows.length - 1; i > 0; i--) {
         results.deleteRow(i);
       }
-
-      const prefix = "Network checking";
-      const t0 = performance.now();
-      const ctrl = new AbortController();
-      setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-
+      
       try {
-        const r = await fetch(getUniqueUrl(URL_CHECK_NETWORK), fetchOpt(ctrl));
-        if (!r.ok) throw new Error("Bad response");
-        await r.blob();
-        logPush("INFO", prefix, `OK (${timeElapsed(t0)})`);
-
         const tasks = [];
         for (let t of TEST_SUITE) {
           for (let i = 0; i < t.times; i++) {
@@ -238,9 +227,9 @@
         await Promise.all(tasks);
         status.textContent = "Ready ⚡";
         status.className = "status-ready";
-      } catch {
-        logPush("ERR", prefix, `FAILED (${timeElapsed(t0)})`);
-        status.textContent = "No internet access ⚠️";
+      } catch (e) {
+        status.textContent = "Unexpected error ⚠️";
+        logPush("ERR", prefix, `Unexpected error => ${e}`);
         status.className = "status-error";
       }
       logPush("INFO", null, "Done.");
@@ -312,7 +301,7 @@
       toggleUI(true);
       localStorage.clear();
       sessionStorage.clear();
-      checkNetwork();
+      startOrchestrator();
     };
   </script>
 </body>
