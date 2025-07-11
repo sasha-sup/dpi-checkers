@@ -12,6 +12,8 @@ The top-10k popular domains based on the list from [OpenDNS](https://github.com/
 **Latest stats**: _266_ domains out of _10'000_ (_2.66%_) are whitelisted<br>
 **File Format**: _.csv/.md_ table with `| Domain | Provider | Country |` header
 
+⚠️ upd.: We found that whitelists can vary significantly between operators. Nevertheless, on average there are a small number of intersecting results. Thus, you can analyze (using the methodology described here) the necessary operators, find the intersection of the results, and use them as needed.
+
 ### Notes
 As far as we know, the whitelist is created using the `*.domain.com:*` scheme. Thus, you can (and should?) use subdomains of the found domains (if _site.com_ works, then _foo.site.com_ and _foo.bar.site.com_ will also work).
 
@@ -20,7 +22,7 @@ We also bring to your attention a graph that shows the dependence of being on th
 It can be seen that there is a correlation between these properties (which is generally logical).
 
 ## Self-running the script
-1. First of all, you have to get an input list with domains to test (the script doesn't get the full whitelist, it just checks your input list to see if each of its elements is included in the DPI whitelist). You can use OpenDNS lists as a starting point (see above);
+1. First of all, you have to get an input list with domains to test (the script doesn't get the full whitelist, it just checks your input list to see if each of its elements is included in the DPI whitelist). You can use OpenDNS lists as a starting point (see above), or you can use [Cloudflare Radar](https://radar.cloudflare.com/domains), for example;
 2. You will need a remote server in “suspicious” networks (i.e. those limited by _TCP 16-20_ blocking method at your “home” ISP). There, you would need to install a web server with https (a self-signed certificate [_openssl_/etc] is fine, since the script ignores validation) that would respond the same regardless of the SNI passed. It should also send a file of at least 128KB (over the network, including compression) to some path — GET request.<br>
    As such a server you can use _nginx_ with approximately the following configuration:
    ```nginx
