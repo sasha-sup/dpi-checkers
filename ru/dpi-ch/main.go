@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/hyperion-cs/dpi-checkers/ru/dpi-ch/cli"
 	"github.com/hyperion-cs/dpi-checkers/ru/dpi-ch/config"
 	"github.com/hyperion-cs/dpi-checkers/ru/dpi-ch/internal/version"
 	"github.com/hyperion-cs/dpi-checkers/ru/dpi-ch/tui"
@@ -20,7 +21,7 @@ func main() {
 		panic(err)
 	}
 
-	ui := flag.String("ui", "t", "ui mode: t | web")
+	ui := flag.String("ui", "t", "ui mode: t | web | cli")
 	ver := flag.Bool("version", false, "print version")
 	forceInetlookupUpd := flag.Bool("force-inetlookup-update", false, "force run the inetlookup update mechanism")
 	forceUpd := flag.Bool("force-update", false, "force run the dpi-ch update mechanism")
@@ -57,6 +58,8 @@ func main() {
 		tui.Tui()
 	case "web":
 		webui.Webui()
+	case "cli":
+		cli.Cli()
 	default:
 		log.Fatalf("unknown --ui value: %s", *ui)
 	}

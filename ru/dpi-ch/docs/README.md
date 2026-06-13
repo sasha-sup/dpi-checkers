@@ -64,6 +64,37 @@ updater:
 Because there's no point in trying to update the utility when it's obviously running the latest version.
 This is already set up in the default configuration.
 
+## Headless mode (CLI) for scheduled monitoring
+Besides the interactive TUI (`--ui t`, default), _dpi-ch_ can run headless via `--ui cli`. It runs the **webhost** checker once over every target in the config, prints one JSON object per target to stdout (JSONL), and exits with a status code:
+
+| exit | meaning |
+|------|---------|
+| `0`  | all targets healthy (alive, not under a "siberian" DPI block) |
+| `1`  | at least one target is down or blocked |
+| `2`  | no targets in config |
+
+```bash
+dpich --ui cli --cfg /path/to/my-server.yaml
+```
+Example output (one line per target):
+```json
+{"ts":"2026-06-13T06:36:10Z","section":"My VPN","target":"reality-443","ip":"203.0.113.42","port":443,"asn":42567,"org":"Mojohost B.v.","country":"NL","subnet":"203.0.113.0/21","sni":"example-vpn.example.com","tls":"1.3","alive":"ok","tcp1620":"ok","siberian":"ok","ok":true}
+```
+The geolite lookup data is refreshed on the same schedule the TUI uses (`updater.enabled` / `updater.period`), so a long-lived cron job keeps its db current. Self-update of the binary is intentionally skipped in this mode.
+
+#### Telegram notifications
+Credentials are read from a `.env` file with `BOT_TOKEN` and `CHAT_ID` keys. Default path is `dpich.env` next to the binary; override it with the `DPICH_TG_ENV` environment variable. Missing credentials are a non-fatal skip (logged to stderr). Notifications are stateful (state persisted in `dpich-state.json` next to the binary):
+
+- 🔴 **down** — sent once when a target transitions to down (no hourly spam while it stays down)
+- 🟢 **recovered** — sent when a previously-down target is healthy again
+- ✅ **heartbeat** — sent once per day while everything is alive, to confirm the monitor itself is running
+
+#### Scheduling (cron example)
+Check every 10 minutes and append a JSONL uptime history (set `DPICH_TG_ENV` to your credentials file):
+```cron
+*/10 * * * * DPICH_TG_ENV=/path/to/telegram.env /path/to/dpich --ui cli --cfg /path/to/my-server.yaml >> ~/dpich-status.jsonl 2>&1
+```
+
 ## Killer features
 #### ⚡ New method for tcp 16-20 (aka l4-25)
 Now, to check for restrictions using the _tcp 16-20_ method, we send data to the host instead of trying to get/download something from it. Research shows that outgoing traffic is restricted by censors in the same way as incoming traffic. This really lowers the requirements for hosts (they just must be able to establish a tcp connection and not close it when they see a stream of data coming from us that's big enough). A similar method is now implemented in the [web version](https://hyperion-cs.github.io/dpi-checkers/ru/tcp-16-20/) of the _tcp 16-20_ checker.

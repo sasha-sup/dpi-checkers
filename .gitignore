@@ -1,5 +1,8 @@
 .DS_Store
 .vscode/
+dpich-*.yaml
+dpich-state.json
+dpich.env
 utils/data/
 ru/dpi-ch/bin/
 debug*
